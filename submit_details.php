@@ -1,10 +1,7 @@
 <?php
 include('dbconnection.php');
 session_start();
-//echo "inside the db";
-
 $ticketnumber = $description = $status = $estimatedtime = $login_time = $logout_time = $remainingtime = $completepercentage = $comments = $is_subticket = $main_ticket_no = $istesting = $iteration_no = array();
-
 
 date_default_timezone_set("Asia/Calcutta");
 $curent_date_time = date(" Y-m-d H:i:s");
@@ -31,7 +28,6 @@ $length = sizeof($ticketnumber);
 
 if ($db) {
 
-    $error_msg="";
     $success=0;
     
     for ($i=0; $i < $length ; $i++) { 
@@ -45,17 +41,22 @@ if ($db) {
     if($answer)
     {
         
-        $completepercentage_from_db = $answer['completepercentage'];
-        
-        if ($completepercentage_from_db + $completepercentage[$i] <= 100) {
-            
-            $completepercentage[$i] = $completepercentage_from_db + $completepercentage[$i];
+        if (true) {
 
             $update = "UPDATE `eodtable` SET `user_id` = '$user_id',`user_name` = '$user_name',`description` = '$description[$i]', `status` = '$status[$i]',`estimatedtime` = '$estimatedtime[$i]',`login_time` = '$login_time[$i]', `logout_time` = '$logout_time[$i]', `remainingtime` = '$remainingtime[$i]', `completepercentage` = '$completepercentage[$i]', `comments` = '$comments[$i]', `is_subticket` = '$is_subticket[$i]', `main_ticket_no` = '$main_ticket_no[$i]', `istesting`='$istesting[$i]', `iteration_no` = '$iteration_no[$i]',`updated_time`='$curent_date_time' WHERE `ticketnumber` = '$ticketnumber[$i]';";
+
+
         
         if (mysqli_query($db, $update)) 
         {
             $success = 1;
+
+            $storing = "INSERT INTO `eodtable2` (`user_id`,`user_name`,`ticketnumber`,`estimatedtime`, `login_time`,`logout_time`,`remainingtime`,`completepercentage`,`created_date_time`) VALUES ('$user_id','$user_name','$ticketnumber[$i]','$estimatedtime[$i]','$login_time[$i]','$logout_time[$i]','$remainingtime[$i]','$completepercentage[$i]','$curent_date_time')";
+
+        if (mysqli_query($db, $storing)) {
+            
+            $success =  1;
+        } 
             
         } 
         else 
@@ -65,11 +66,7 @@ if ($db) {
         }
 
         } 
-        else {
-            $success =1;
-
-            $error_msg = "Invalid work completed value for the ticketnumber - ".$ticketnumber[$i] ;            
-        }
+        
         
     }
 
@@ -80,6 +77,13 @@ if ($db) {
         if (mysqli_query($db, $store)) {
             
             $success =  1;
+
+            $storing = "INSERT INTO `eodtable2` (`user_id`,`user_name`,`ticketnumber`,`estimatedtime`, `login_time`,`logout_time`,`remainingtime`,`completepercentage`,`created_date_time`) VALUES ('$user_id','$user_name','$ticketnumber[$i]','$estimatedtime[$i]','$login_time[$i]','$logout_time[$i]','$remainingtime[$i]','$completepercentage[$i]','$curent_date_time')";
+
+        if (mysqli_query($db, $storing)) {
+            
+            $success =  1;
+        } 
 
         } 
         else {
@@ -97,8 +101,7 @@ if ($db) {
 if($success === 1){
     echo json_encode(array(
     'status' => 'success',
-    'message'=> 'You have successfully submitted your end of the day report',
-    'error_msg' => $error_msg
+    'message'=> 'You have successfully submitted your end of the day report'
          ));
 }
 
