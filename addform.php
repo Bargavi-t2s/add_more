@@ -1,15 +1,20 @@
 <?php
 
     $i=$_POST['form_time'];
-
-echo '<br<form action=""  class="eodform" name="eodform" id="eodform'.$i.'" method="POST">
-               <h2>EOD</h2>
+    // $id="eodform";
+    // $id.=$i;
+    // $f='onclick="clear_function(';
+    // $f.=$id;
+    // $f.=')"';
+    // echo $f;
+echo '<br<form action=""  class="eodform"  id="eodform'.$i.'" method="POST">
+              <h2>EOD</h2>
                <div class="row">
                   <div class="col-sm-6">
                      <div class="form-group row">
                         <label for="ticketnumber" class="col-sm-6">Ticket Number<span class="star">*</span></label>
                         <div class="col-sm-6">
-                           <input type="number" class="form-control" name="ticketnumber[]" id="ticketnumber'.$i.'" onblur="get_estimation_function()" placeholder="Ticket Number" autofocus required >
+                           <input type="number" class="form-control" name="ticketnumber[]" id="ticketnumber'.$i.'" onblur="get_estimation_function($(this).val())" placeholder="Ticket Number" autofocus required >
                         </div>
                      </div>
                      <div class="form-group row">
@@ -43,16 +48,18 @@ echo '<br<form action=""  class="eodform" name="eodform" id="eodform'.$i.'" meth
                      <div class="form-group row">
                         <label for="istesting" class="col-sm-6">Went for Testing<span class="star">*</span></label>
                         <div class="col-sm-6">
-                           <input type="radio" class="r3" value="yes" class="radio" name="istesting[]" required>Yes
-                           <input type="radio" class="r4" value="no" class="radio" name="istesting[]">No
+                           <input type="radio"  value="yes" class="testing_radio" name="istesting[]" required>Yes
+                           <input type="radio"  value="no" class="testing_radio" name="istesting[]">No
                         </div>
                      </div>
-                     <div id="iterationdiv" class="form-group row">
+                     <div id ="iterationdiv'.$i.'" class="iterationdiv">
+                     <div class="form-group row">
                         <label for="iteration_no" class="col-sm-6">Iteration Number<span class="star">*</span></label>
                         <div class="col-sm-6">
-                           <input class="form-control col-sm-6" type="number" id="iteration_no'.$i.'" name="iteration_no[]">
+                           <input class="form-control col-sm-6" type="number" id="iteration_no1" name="iteration_no[]">
                         </div>
                      </div>
+                   </div>
                   </div>
                   <div class="col-sm-1"></div>
                   <div class="col-sm-5">
@@ -92,11 +99,11 @@ echo '<br<form action=""  class="eodform" name="eodform" id="eodform'.$i.'" meth
                      <div class="form-group row">
                         <label for="is_subticket" class="col-sm-6">Sub Ticket<span class="star">*</span></label>
                         <div class="col-sm-6">
-                           <input type="radio" class="r1" value="yes" class="radio" name="is_subticket[]" required>Yes
-                           <input type="radio" class="r2" value="no" class="radio" name="is_subticket[]">No
+                           <input type="radio"  value="yes" class="is_subticket_radio" name="is_subticket[]" required>Yes
+                           <input type="radio"  value="no" class="is_subticket_radio" name="is_subticket[]">No
                         </div>
                      </div>
-                     <div id="subdiv">
+                     <div id="subdiv'.$i.'" class="subdiv">
                         <div class="form-group row">
                            <label for="main_ticket_no" class="col-sm-6">Main Ticknet no:<span class="star">*</span></label>
                            <div class="col-sm-6">
@@ -106,10 +113,7 @@ echo '<br<form action=""  class="eodform" name="eodform" id="eodform'.$i.'" meth
                      </div>
                   </div>
                </div>
-               <div class="buttons" style="text-align: center;">
-                  <button type="reset" name="clear" class="btn btn-danger clear">Clear</button>
-               </div>
-            </form>';
+               </form>';
 
-
+// <div class="buttons" style="text-align: center;"><button type="reset" name="clear" id="clear" class="btn btn-danger clear">Clear</button></div>
 ?>

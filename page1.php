@@ -6,8 +6,9 @@
       <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
       <!-- Bootstrap CSS -->
       <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-      <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-      <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+      <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script> -->
+      <!-- <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script> -->
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.0/jquery.min.js"></script>
       <title>T2S-EOD</title>
       <style>
          h2 {
@@ -36,8 +37,21 @@
          .buttons {
          margin:auto;
          }
-         .radio {
-         margin-top: 0.6em;
+         .testing_radio {
+         margin-left: 1em;
+         }
+         .is_subticket_radio
+         {
+          margin-left: 1em;
+         }
+         .subdiv
+         {
+          display: none;
+         }
+         .iterationdiv
+
+         {
+          display: none;
          }
       </style>
    </head>
@@ -53,14 +67,14 @@
             <h4 id="error_msg"></h4>
          </div>
          <div id="form">
-            <form class ="eodform" action="" name="eodform" id="eodform1" method="POST">
+            <form class ="eodform" action="" id="eodform1" method="POST">
                <h2>EOD</h2>
                <div class="row">
                   <div class="col-sm-6">
                      <div class="form-group row">
                         <label for="ticketnumber" class="col-sm-6">Ticket Number<span class="star">*</span></label>
                         <div class="col-sm-6">
-                           <input type="number" class="form-control" name="ticketnumber[]" id="ticketnumber1" onblur="get_estimation_function()"  placeholder="Ticket Number" autofocus required >
+                           <input type="number" class="form-control" name="ticketnumber[]" id="ticketnumber1" onblur="get_estimation_function($(this).val())"  placeholder="Ticket Number" autofocus required >
                         </div>
                      </div>
                      <div class="form-group row">
@@ -94,23 +108,25 @@
                      <div class="form-group row">
                         <label for="istesting" class="col-sm-6">Went for Testing<span class="star">*</span></label>
                         <div class="col-sm-6">
-                           <input type="radio" class="r3" value="yes" class="radio" name="istesting[]" required>Yes
-                           <input type="radio" class="r4" value="no" class="radio" name="istesting[]">No
+                           <input type="radio"  value="yes" class="testing_radio" name="istesting[]" required>Yes
+                           <input type="radio"  value="no" class="testing_radio" name="istesting[]">No
                         </div>
                      </div>
-                     <div id="iterationdiv" class="form-group row">
+                     <div id ="iterationdiv1" class="iterationdiv">
+                     <div class="form-group row">
                         <label for="iteration_no" class="col-sm-6">Iteration Number<span class="star">*</span></label>
                         <div class="col-sm-6">
                            <input class="form-control col-sm-6" type="number" id="iteration_no1" name="iteration_no[]">
                         </div>
                      </div>
+                   </div>
                   </div>
                   <div class="col-sm-1"></div>
                   <div class="col-sm-5">
                      <div class="form-group row">
                         <label for="estimatedtime" class="col-sm-6">Estimated Time<span class="star">*</span></label>
                         <div class="col-sm-6">
-                           <input type="text" class="form-control col-sm-7" name="estimatedtime[]" id="estimatedtime1" placeholder="Eg: 1hr"  onblur="get_remainingtime_function()" required >
+                           <input type="text" class="form-control col-sm-7" name="estimatedtime[]" id="estimatedtime1" placeholder="Eg: 1hr"  onblur="get_remainingtime_function($(this).val())" required >
                         </div>
                      </div>
                      <div class="form-group row">
@@ -143,11 +159,11 @@
                      <div class="form-group row">
                         <label for="is_subticket" class="col-sm-6">Sub Ticket<span class="star">*</span></label>
                         <div class="col-sm-6">
-                           <input type="radio" id="r1" value="yes" class="radio" name="is_subticket[]" required>Yes
-                           <input type="radio" id="r2" value="no" class="radio" name="is_subticket[]">No
+                           <input type="radio"  value="yes" class="is_subticket_radio" name="is_subticket[]" required>Yes
+                           <input type="radio"  value="no" class="is_subticket_radio" name="is_subticket[]">No
                         </div>
                      </div>
-                     <div id="subdiv">
+                     <div id="subdiv1" class="subdiv">
                         <div class="form-group row">
                            <label for="main_ticket_no" class="col-sm-6">Main Ticknet no:<span class="star">*</span></label>
                            <div class="col-sm-6">
@@ -157,9 +173,10 @@
                      </div>
                   </div>
                </div>
-               <div class="buttons" style="text-align: center;">
+               <!-- <div class="buttons" style="text-align: center;">
                   <button type="reset" name="clear" id="clear" class="btn btn-danger clear">Clear</button>
                </div>
+ -->               
             </form>
          </div>
          <br>
@@ -172,11 +189,8 @@
          </div>
       </div>
       <script type="text/javascript">
-         function get_estimation_function() {
+         function get_estimation_function(ticketnumber) {
                     var index=$("input[name='ticketnumber[]']").length;
-                    var value=$("input[name='ticketnumber[]']").map(function(){return $(this).val();}).get();
-                    var ticketnumber= value[index-1];
-                    console.log(ticketnumber);
                     $.ajax({
                     type: "POST",
                     url: "get_estimatedtime.php",
@@ -186,15 +200,15 @@
                     },
                     cache: false,
                     success: function(response) {
-                        console.log(response);
-                        console.log("inside success function");
+                        
                         var idname = ["completepercentage","estimatedtime","remainingtime"];
                         for (i=0;i<idname.length;i++)
                         {
                             idname[i]+=index;
+                            $('#'+idname[i]).find('option').remove();
                         
                         } 
-                        console.log(idname);
+                        $('#'+idname[1]).val("");
                         for(var i = parseInt(response.prev_completepercentage); i <=100; i+=5)
                         {   var option="";
                             option = '<option value="'+i+'">' +i+ '</option>';
@@ -212,15 +226,12 @@
                 });
                 }
          
-            function get_remainingtime_function()
+            function get_remainingtime_function(estimatedtime)
             {
                 var index=$("input[name='estimatedtime[]']").length;
-                var value=$("input[name='estimatedtime[]']").map(function(){return $(this).val();}).get();
-                
-                var estimatedtime = value[index-1];
-                console.log(estimatedtime);
                 var idname ="remainingtime";
                 idname+=index;
+                $('#'+idname).find('option').remove();
 
                for(var i = estimatedtime ; i >=0; i--)
                {
@@ -231,36 +242,55 @@
                }
          
             }
-
-            function reset_function(){
-                var form_id = $(this).closest("form").attr('id');  
-                console.log(form_id);              
-                $("#"+form_id).trigger("reset");
-
+            function clear_function(idname){
+              $('#'+idname).trigger('reset');
             }
+
+            
+            $(document).on('change','.testing_radio',function(){
+              var yesorno = $(this).val();
+              var div_id = $(this).closest('.eodform').find('.iterationdiv').attr('id');
+              if(yesorno === 'yes')
+              {
+                $('#'+div_id).show();
+              } 
+
+              else{
+                $('#'+div_id).hide();
+              }      
+            });
+            
+            $(document).on('change','.is_subticket_radio',function(){
+              var yesorno = $(this).val();
+              var div_id = $(this).closest('.eodform').find('.subdiv').attr('id');
+              if(yesorno === 'yes')
+              {
+                $('#'+div_id).show();
+              }
+              else{
+                $('#'+div_id).hide();
+
+              }     
+            });
+
+            
+            $(document).on('click', '.clear', function(){ 
+            console.log("inside the click function");
+                var form_id = $(this).closest('.eodform').attr('id');  
+                console.log(form_id);
+                $('#'+form_id).trigger('reset');
+            });
+
+
          $(document).ready(function() {
             var form_time=1;
             $('#error_div').delay(0).hide(0);
             $('#success_div').delay(0).hide(0);
-            // $('#subdiv').delay(0).hide(0);
-            // $('#iterationdiv').delay(0).hide(0);
-            // $('input[name=is_subticket]').on("click", function() {
-            //     if ($('input[name=is_subticket]').index(this) == 0)
-            //         $('#subdiv').show("fast");
-            //     else
-            //         $('#subdiv').delay(0).hide(0);
-            // });
-         
-            // $('input[name=istesting]').on("click", function() {
-         
-            //     if ($('input[name=istesting]').index(this) == 0)
-            //         $('#iterationdiv').show("fast");
-            //     else
-            //         $('#iterationdiv').delay(0).hide(0);
-            // });
 
             $('#add_more').click(function(e){
                 form_time=form_time+1;
+                var val="eodform";
+                  val+=form_time;
                 $.ajax({
                     type: "POST",
                     url: "addform.php",
@@ -269,9 +299,7 @@
                         form_time:form_time
                     },
                     success: function(response) {
-                        $('#form').append(response);
-                        console.log("inside success function");
-                        
+                        $('#form').append(response);                       
                     }
                 });         
             });
@@ -293,10 +321,7 @@
         var main_ticket_no = $("input[name='main_ticket_no[]']").map(function(){return $(this).val();}).get();
         var istesting = $("input[name='istesting[]']:checked").map(function(){return $(this).val();}).get();
         var iteration_no = $("input[name='iteration_no[]']").map(function(){return $(this).val();}).get();
-                
-                
-                console.log(ticketnumber,description,status,estimatedtime,login_time,logout_time,remainingtime,completepercentage,comments,is_subticket,main_ticket_no,istesting,iteration_no);
-              
+                              
                 $.ajax({
          
                     type: "POST",
@@ -330,7 +355,7 @@
                             }
                             else{
                             $("#success_msg").html(response.message);
-                            $("#eodform").trigger("reset");
+                            $(".eodform").trigger("reset");
                             $('#success_div').show().delay(8000).fadeOut();
                             //setTimeout(location.reload.bind(location), 1000);
                           }
@@ -346,12 +371,8 @@
             });
 
 
-            $(document).on('click', '.clear', function(){ 
-            console.log("inside the click function");
-                var form_id = $(this).closest('.eodform').attr('id');  
-                console.log(form_id);              
-                $('#'+form_id).trigger("reset");
-            });
+            
+            
          });
       </script>
    </body>
